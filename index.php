@@ -1,66 +1,80 @@
 <?php
 error_reporting(E_ALL ^ E_NOTICE);
-require_once 'excel_reader2.php';
-$data = new Spreadsheet_Excel_Reader("kaartmarathon.xls");
-?>
-<html>
-<head>
-<?php 
-// wat is de getoonde pagina?
+require_once 'excel_reader/excel_reader.php';
+// creates an object instance of the class, and read the excel file data
+$excel = new PhpExcelReader;
+$excel->read('kaartmarathon.xls');
+
+// Trek de waarde uit de varaibele die is verstuurd
+
+$waarde = $_GET["waarde"];
+
+// wat is de getoonde pagina en zorg voor de juiste reload van de pagina
 if ($waarde=="jokeren"){
   echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"60; URL=index.php\">\n";
+  $sheet=1;
 }else{
   echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"60; URL=index.php?waarde=jokeren\">\n";
+  $sheet=0;
 }
 ?>
-<link rel="stylesheet" type="text/css" href="text.css" />
+
+<html>
+<head>
+<style type="text/css">
+table {
+ border-collapse: collapse;
+}        
+td {
+ border: 1px solid black;
+ padding: 0 0.5em;
+}
+body{ 
+  font-family: verdana, sans-serif;
+  color: #000000;
+  letter-spacing: 0pt;
+  background-color: #FFd700;
+}
+</body>     
+</style>
 </head>
 
 <body>
 <H2>Kaartmarathon 2012</H2>
+
 <?php
-if  ($waarde=="klaverjassen" or $waarde==""){
-  echo "<h3>Klaverjassen</h3>\n";
-  echo "<table border=1 cellpadding=2>\n";
-  echo "<tr>\n";
 
-  // create the tableheaders
-  for ($i=1; $i<10; $i++) {
-    echo "<th>".$data->val(1,$i)."</th>\n";
-  } 
-  //Fill up the table cells per row -->
-  for ($row=2; $row<30; $row++){
-    echo "<tr>\n";
-    echo "  <td class=\"koppel\">".$data->val($row,1)."</td>\n";
-    for ($i=2; $i<10; $i++) {
-      echo "<td class=\"getal\">".$data->val($row,$i)."</td>\n";
-    }
-    echo "</tr>\n";
-  } 
-  echo "</table>\n";
-    
-  
-}else{
-  echo "<h3>Jokeren</h3>\n";
-  echo "<table border=1 cellpadding=2>\n";
-  echo "<tr>\n";
+// this function creates and returns a HTML table with excel rows and columns data
+// Parameter - array with excel worksheet data
+function sheetData($sheet) {
+  $re = '<table>';     // starts html table
 
-  // create the tableheaders
-  for ($i=1; $i<10; $i++) {
-    echo "<th>".$data->val(1,$i,1)."</th>\n";
-  } 
-  //Fill up the table cells per row -->
-  for ($row=2; $row<13; $row++){
-    echo "<tr>\n";
-    echo "  <td class=\"naam\">".$data->val($row,1,1)."</td>\n";
-    for ($i=2; $i<10; $i++) {
-      echo "<td class=\"getal\">".$data->val($row,$i,1)."</td>\n";
-    }
-    echo "</tr>\n";
-  } 
-  echo "</table>\n";
+  $x = 1;
+  while($x <= $sheet['numRows']) {
+    $re .= "<tr>\n";
+    $y = 1;
+    while($y <= $sheet['numCols']) {
+      $cell = isset($sheet['cells'][$x][$y]) ? $sheet['cells'][$x][$y] : '';
+      $re .= " <td>$cell</td>\n";  
+      $y++;
+    }  
+    $re .= "</tr>\n";
+    $x++;
+  }
+
+  return $re .'</table>';     // ends and returns the html table
 }
 
-?>
+
+$nr_sheets = count($excel->sheets);       // gets the number of sheets
+$excel_data = '';              // to store the the html tables with data of each sheet
+
+
+// traverses the number of sheets and sets html table with each sheet data in $excel_data
+$excel_data .= sheetData($excel->sheets[$sheet]) .'<br/>';  
+
+// displays tables with excel file data
+echo $excel_data;
+?>    
 </body>
 </html>
