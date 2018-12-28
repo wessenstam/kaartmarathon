@@ -1,0 +1,45 @@
+body{ 
+  font-family: verdana, sans-serif;
+  color: #000000;
+  letter-spacing: 0pt;
+  background-color: #FFd700;
+}
+
+th {
+  font-family: verdana, sans-serif;
+  
+  color: #FFFFFF;
+  font-size: 14px;
+  letter-spacing: 0pt;
+  background-color: #F01e13;
+}
+
+td.naam {
+  font-family: verdana, sans-serif;
+  color: #FFFFFF;
+  font-size: 14px;
+  letter-spacing: 0pt;
+  text-align: left;
+  background-color: #F01e13;  
+}
+
+td.koppel {
+  font-family: verdana, sans-serif;
+  color: #FFFFFF;
+  font-size: 14px;
+  letter-spacing: 0pt;
+  text-align: center;
+  font-weight: bold;
+  background-color: #F01e13;  
+}
+
+td.getal {
+  text-align: right;
+  font-family: verdana, sans-serif;
+  color: #FFFFFF;
+  font-size: 14px;
+  letter-spacing: 0pt;
+  background-color: #F01e13;  
+}
+
+p { color: blue; } 
