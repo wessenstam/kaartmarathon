@@ -40,7 +40,7 @@ body{
 </head>
 
 <body>
-<H2>Kaartmarathon 2012</H2>
+<H2>Kaartmarathon 2019</H2>
 
 <?php
 
